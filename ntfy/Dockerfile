@@ -7,7 +7,11 @@ RUN apk upgrade --no-cache \
     py3-pip \
     openssl-dev \
     libffi-dev \
-    && pip3 install --upgrade pip \
+    git \
+    && pip3 install --upgrade pip 
+
+RUN git clone https://github.com/dschep/ntfy.git \
+    && cd ntfy \
     && pip3 install --upgrade ntfy[pid,emoji,xmpp,telegram,instapush,slack,rocketchat,slack_webhook]
 
 # FROM b3vis/borgmatic:v1.1.16-1.5.14
