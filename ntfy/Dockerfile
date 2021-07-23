@@ -8,14 +8,16 @@ RUN apk upgrade --no-cache \
     openssl-dev \
     libffi-dev \
     git \
-    && pip3 install --upgrade pip 
+    && pip3 install --upgrade pip wheel
+
 
 RUN git clone https://github.com/dschep/ntfy.git \
-    && pip3 install -e ntfy ntfy[pid,emoji,xmpp,telegram,instapush,slack,rocketchat,slack_webhook]
+    && cd ntfy \
+    && PYTHONUSERBASE=/tmp pip3 install --user --force-reinstall .
 
-# FROM b3vis/borgmatic:v1.1.16-1.5.14
 FROM b3vis/borgmatic:latest
 LABEL mainainer='b3vis'
 VOLUME /root/.config/ntfy
-COPY --from=builder /usr/lib/python3.9/site-packages /usr/lib/python3.8/
-COPY --from=builder /usr/bin/ntfy /usr/bin/
+
+COPY --from=builder /tmp/lib/python3.9/site-packages /usr/lib/python3.8
+COPY --from=builder /tmp/bin /usr/bin/
